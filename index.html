@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Rental System</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; text-align: center; }
+        .container { max-width: 500px; margin: 50px auto; background: white; padding: 20px; box-shadow: 0px 0px 10px gray; }
+        input, select, button { width: 100%; padding: 10px; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <div class="container" id="app">
+        <h2 id="step-title">Enter Your Details</h2>
+        <div id="step1">
+            <input id="name" placeholder="Name">
+            <input id="phone" placeholder="Phone">
+            <input id="address" placeholder="Address">
+            <input id="license" placeholder="License Number">
+            <button onclick="nextStep(2)">Next</button>
+        </div>
+        <div id="step2" style="display: none;">
+            <select id="vehicleType">
+                <option value="Car">Car</option>
+                <option value="Bike">Bike</option>
+            </select>
+            <button onclick="nextStep(3)">Next</button>
+        </div>
+        <div id="step3" style="display: none;">
+            <input id="model" placeholder="Model Name">
+            <button onclick="nextStep(4)">Next</button>
+        </div>
+        <div id="step4" style="display: none;">
+            <input type="number" id="duration" placeholder="Rental Duration (days)">
+            <button onclick="calculatePrice()">Calculate Price</button>
+        </div>
+        <div id="step5" style="display: none;">
+            <h3>Billing Details</h3>
+            <p id="bill"></p>
+            <button onclick="alert('Booking Confirmed!')">Confirm Booking</button>
+        </div>
+    </div>
+
+    <script>
+        let step = 1;
+        function nextStep(next) {
+            document.getElementById(`step${step}`).style.display = "none";
+            document.getElementById(`step${next}`).style.display = "block";
+            step = next;
+        }
+
+        function calculatePrice() {
+            const name = document.getElementById("name").value;
+            const phone = document.getElementById("phone").value;
+            const vehicleType = document.getElementById("vehicleType").value;
+            const model = document.getElementById("model").value;
+            const duration = document.getElementById("duration").value;
+            const rate = vehicleType === "Car" ? 50 : 30;
+            const total = duration * rate;
+
+            document.getElementById("bill").innerHTML = `
+                Name: ${name} <br>
+                Phone: ${phone} <br>
+                Vehicle: ${vehicleType} - ${model} <br>
+                Duration: ${duration} days <br>
+                Total Price: $${total}
+            `;
+            nextStep(5);
+        }
+    </script>
+</body>
+</html>
