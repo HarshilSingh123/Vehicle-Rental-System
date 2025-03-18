@@ -5,9 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vehicle Rental System</title>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f4f4f4; text-align: center; }
-        .container { max-width: 500px; margin: 50px auto; background: white; padding: 20px; box-shadow: 0px 0px 10px gray; }
-        input, select, button { width: 100%; padding: 10px; margin: 10px 0; }
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; text-align: center; margin: 0; padding: 0; }
+        .container { max-width: 500px; margin: 50px auto; background: white; padding: 30px; box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2); border-radius: 10px; }
+        input, button {
+            width: calc(100% - 20px);
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        .vehicle-btn {
+            width: 48%;
+            margin: 10px 1%;
+            background-color: #eaeaea;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            padding: 12px;
+            cursor: pointer;
+        }
+        button:hover, .vehicle-btn:hover {
+            background-color: #ccc;
+        }
     </style>
 </head>
 <body>
@@ -21,11 +42,8 @@
             <button onclick="nextStep(2)">Next</button>
         </div>
         <div id="step2" style="display: none;">
-            <select id="vehicleType">
-                <option value="Car">Car</option>
-                <option value="Bike">Bike</option>
-            </select>
-            <button onclick="nextStep(3)">Next</button>
+            <button class="vehicle-btn" onclick="selectVehicle('Car')">Car</button>
+            <button class="vehicle-btn" onclick="selectVehicle('Bike')">Bike</button>
         </div>
         <div id="step3" style="display: none;">
             <input id="model" placeholder="Model Name">
@@ -44,25 +62,31 @@
 
     <script>
         let step = 1;
+        let selectedVehicleType = "";
+
         function nextStep(next) {
             document.getElementById(`step${step}`).style.display = "none";
             document.getElementById(`step${next}`).style.display = "block";
             step = next;
         }
 
+        function selectVehicle(type) {
+            selectedVehicleType = type;
+            nextStep(3);
+        }
+
         function calculatePrice() {
             const name = document.getElementById("name").value;
             const phone = document.getElementById("phone").value;
-            const vehicleType = document.getElementById("vehicleType").value;
             const model = document.getElementById("model").value;
             const duration = document.getElementById("duration").value;
-            const rate = vehicleType === "Car" ? 50 : 30;
+            const rate = selectedVehicleType === "Car" ? 50 : 30;
             const total = duration * rate;
 
             document.getElementById("bill").innerHTML = `
                 Name: ${name} <br>
                 Phone: ${phone} <br>
-                Vehicle: ${vehicleType} - ${model} <br>
+                Vehicle: ${selectedVehicleType} - ${model} <br>
                 Duration: ${duration} days <br>
                 Total Price: $${total}
             `;
