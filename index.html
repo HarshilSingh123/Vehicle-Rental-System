@@ -37,7 +37,7 @@
         button:hover {
             background-color: #ccc;
         }
-        .vehicle-button {
+        .vehicle-button, .model-button {
             width: 48%;
             padding: 15px;
             margin: 10px 1%;
@@ -49,8 +49,13 @@
             border: none;
             transition: background 0.3s ease;
         }
-        .vehicle-button:hover {
+        .vehicle-button:hover, .model-button:hover {
             background-color: #bbb;
+        }
+        .model-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
         }
     </style>
 </head>
@@ -70,8 +75,15 @@
             <button class="vehicle-button" onclick="selectVehicle('Bike')">Bike</button>
         </div>
         <div id="step3" style="display: none;">
-            <input id="model" placeholder="Model Name">
-            <button onclick="nextStep(4)">Next</button>
+            <h3>Select Car Model</h3>
+            <div class="model-container">
+                <button class="model-button" onclick="selectModel('Range Rover')">Range Rover</button>
+                <button class="model-button" onclick="selectModel('BMW i7')">BMW i7</button>
+                <button class="model-button" onclick="selectModel('Mercedes Benz-S Class')">Mercedes Benz-S Class</button>
+                <button class="model-button" onclick="selectModel('Toyota')">Toyota</button>
+                <button class="model-button" onclick="selectModel('Mahindra Thar')">Mahindra Thar</button>
+                <button class="model-button" onclick="selectModel('Nissan Datsun Go')">Nissan Datsun Go</button>
+            </div>
         </div>
         <div id="step4" style="display: none;">
             <input type="number" id="duration" placeholder="Rental Duration (days)">
@@ -87,6 +99,7 @@
     <script>
         let step = 1;
         let selectedVehicle = "";
+        let selectedModel = "";
 
         function nextStep(next) {
             document.getElementById(`step${step}`).style.display = "none";
@@ -96,14 +109,22 @@
 
         function selectVehicle(type) {
             selectedVehicle = type;
-            nextStep(3);
+            if (type === 'Car') {
+                nextStep(3);
+            } else {
+                nextStep(4);
+            }
+        }
+
+        function selectModel(model) {
+            selectedModel = model;
+            nextStep(4);
         }
 
         function calculatePrice() {
             const name = document.getElementById("name").value;
             const phone = document.getElementById("phone").value;
             const vehicleType = selectedVehicle;
-            const model = document.getElementById("model").value;
             const duration = document.getElementById("duration").value;
             const rate = vehicleType === "Car" ? 50 : 30;
             const total = duration * rate;
@@ -111,7 +132,7 @@
             document.getElementById("bill").innerHTML = `
                 Name: ${name} <br>
                 Phone: ${phone} <br>
-                Vehicle: ${vehicleType} - ${model} <br>
+                Vehicle: ${vehicleType} - ${selectedModel} <br>
                 Duration: ${duration} days <br>
                 Total Price: $${total}
             `;
